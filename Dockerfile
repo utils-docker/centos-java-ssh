@@ -7,6 +7,7 @@ WORKDIR /opt
 COPY custom/supervisor.d/* /etc/supervisor.d/
 
 RUN yum -y update && yum install -y openssh-server \
+  && mkdir /opt/app \
   && printf "password\npassword" | adduser app \
   && echo "app:password" | chpasswd \
   && ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -P "" \
@@ -16,6 +17,6 @@ RUN yum -y update && yum install -y openssh-server \
   && echo "AllowUsers app" >> /etc/ssh/sshd_config \
   && yum clean all && rm -rf /tmp/* && rm -rf /var/cache/yum
 
-VOLUME /opt
+VOLUME /opt/app
 
 EXPOSE 22/tcp 8080/tcp 8443/tcp
